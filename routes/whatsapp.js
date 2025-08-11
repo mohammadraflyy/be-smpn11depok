@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { getQrCode, isReady, logout } = require('../services/whatsApp');
+const { getQrCode, isReady, logout } = require('../services/whatsapp');
 
 router.get('/qr', (req, res) => {
   if (isReady()) {
