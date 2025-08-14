@@ -6,7 +6,6 @@ const path = require('path');
 const SESSION_FOLDER = '.wwebjs_auth';
 const SESSION_READY_FILE = path.join(SESSION_FOLDER, 'session.ready');
 
-console.log(SESSION_FOLDER, SESSION_READY_FILE);
 if (fs.existsSync(SESSION_FOLDER) && !fs.existsSync(SESSION_READY_FILE)) {
   console.log('[CLEANUP] Deleting stale session folder...');
   fs.rmSync(SESSION_FOLDER, { recursive: true, force: true });
@@ -64,7 +63,6 @@ const reinitClient = () => {
 
 const logout = async () => {
   try {
-    // Step 1: Kill the puppeteer browser instance if running
     if (client.pupBrowser) {
       console.log('[ACTION] Closing puppeteer browser...');
       await client.pupBrowser.close();
@@ -73,7 +71,6 @@ const logout = async () => {
       await client._client.browser.close();
     }
 
-    // Step 2: Perform WhatsApp logout
     if (!client || !client.info || !client.info.wid) {
       console.warn('[WARN] Cannot logout: Client not connected.');
     } else {
@@ -81,13 +78,11 @@ const logout = async () => {
       await client.logout();
     }
 
-    // Step 3: Clean up session folder
     if (fs.existsSync(SESSION_FOLDER)) {
       fs.rmSync(SESSION_FOLDER, { recursive: true, force: true });
       console.log('[CLEANUP] Session folder deleted');
     }
 
-    // Step 4: Reinitialize client
     reinitClient();
     return { success: true, message: 'Logged out and browser killed successfully.' };
   } catch (err) {
