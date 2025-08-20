@@ -15,7 +15,9 @@ if (fs.existsSync(SESSION_FOLDER) && !fs.existsSync(SESSION_READY_FILE)) {
 
 const client = new Client({
   authStrategy: new LocalAuth({}),
-  puppeteer: { headless: true }
+  puppeteer: {
+    args: ['--no-sandbox']
+  }
 });
 
 let qrImageData = null;
